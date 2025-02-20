@@ -1,8 +1,8 @@
-author = Author.objects.get(name='James Smith')
+author = Author.objects.get(name='author_name')
 books = author.books.all()
 
-library = Library.objects.get(name='Machakos University')
+library = Library.objects.get(name='library_name')
 books = library.libraries.all()
 
-library = Library.objects.get(name='Machakos University')
-librarian = library.librarian.get(name="Jack")
+library = Library.objects.get(name='library_name')
+librarian = library.librarian.get(name="librarian_name")
