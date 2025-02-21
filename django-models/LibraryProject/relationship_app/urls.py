@@ -9,8 +9,8 @@ urlpatterns = [
     path('library/books/', LibraryDetailView.as_view(), name='library-books'),
     path('', views.home_view, name='home'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('login/', LoginView.as_view(template_name='relationship_app/registration/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(template_name='relationship_app/registration/logout.html'), name='logout'),
+    path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),
     path('register/', views.register, name='register'),
 
 ]
