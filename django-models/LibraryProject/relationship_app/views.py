@@ -33,6 +33,6 @@ def register(request):
             messages.error(request, 'Error during registration. Please check your input.')
     else:
         form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'relationship_app/registration/register.html', {'form': form})
 
 
