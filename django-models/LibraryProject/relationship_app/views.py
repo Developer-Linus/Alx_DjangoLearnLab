@@ -22,9 +22,17 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
 
-class RegisterView(CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy("login")
-    template_name = "relationship_app/registration/signup.html"
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Registration successful. You can now log in.')
+            return redirect('login')  # Redirect to the login page after successful registration
+        else:
+            messages.error(request, 'Error during registration. Please check your input.')
+    else:
+        form = UserCreationForm()
+    return render(request, 'relationship_app/registration/signup.html', {'form': form})
 
 
