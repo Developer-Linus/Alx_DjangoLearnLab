@@ -11,7 +11,7 @@ from django.contrib.auth import logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.http import HttpResponseForbidden
 
 def home_view(request):
@@ -37,34 +37,29 @@ def register(request):
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {'form': form})
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import user_passes_test
 
-# Function to check if the user is an Admin
+
 def is_admin(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
-# Function to check if the user is a Librarian
 def is_librarian(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
 
-# Function to check if the user is a Member
 def is_member(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
-# Admin View (Only Admins Can Access)
+@login_required
 @user_passes_test(is_admin)
 def admin_view(request):
-    return render(request, 'admin_dashboard.html')
+    return HttpResponse("Welcome, Admin! You have access to this page.")
 
-# Librarian View (Only Librarians Can Access)
+@login_required
 @user_passes_test(is_librarian)
 def librarian_view(request):
-    return render(request, 'librarian_dashboard.html')
+    return HttpResponse("Welcome, Librarian! You have access to this page.")
 
-# Member View (Only Members Can Access)
+@login_required
 @user_passes_test(is_member)
 def member_view(request):
-    return render(request, 'member_dashboard.html')
-
+    return HttpResponse("Welcome, Member! You have access to this page.")
 
