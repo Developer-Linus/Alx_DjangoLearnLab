@@ -40,39 +40,36 @@ def register(request):
 
 
 
-def is_admin(user):
-    if not hasattr(user, 'userprofile'):
+# Role-checking functions
+def check_role(user, role):
+    if not user.userprofile:
         raise PermissionDenied("User profile does not exist.")
-    if user.userprofile.role != 'Admin':
-        raise PermissionDenied("You do not have admin privileges.")
+    if user.userprofile.role != role:
+        raise PermissionDenied(f"You do not have {role} privileges.")
     return True
+
+def is_admin(user):
+    return check_role(user, 'Admin')
 
 def is_librarian(user):
-    if not hasattr(user, 'userprofile'):
-        raise PermissionDenied("User profile does not exist.")
-    if user.userprofile.role != 'Librarian':
-        raise PermissionDenied("You do not have librarian privileges.")
-    return True
+    return check_role(user, 'Librarian')
 
 def is_member(user):
-    if not hasattr(user, 'userprofile'):
-        raise PermissionDenied("User profile does not exist.")
-    if user.userprofile.role != 'Member':
-        raise PermissionDenied("You do not have member privileges.")
-    return True
+    return check_role(user, 'Member')
 
+# Views with access control
 @login_required
 @user_passes_test(is_admin)
 def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html')
+    return render(request, 'admin_view.html')
 
 @login_required
 @user_passes_test(is_librarian)
 def librarian_view(request):
-    return render(request, 'relationship_app/librarian_view.html')
+    return render(request, 'librarian_view.html')
 
 @login_required
 @user_passes_test(is_member)
 def member_view(request):
-    return render(request, 'relationship_app/member_view.html')
+    return render(request, 'member_view.html')
 
