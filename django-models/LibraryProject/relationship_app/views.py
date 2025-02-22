@@ -13,6 +13,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
 
 def home_view(request):
     return HttpResponse('Welcome to library app.')
@@ -40,13 +41,25 @@ def register(request):
 
 
 def is_admin(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+    if not hasattr(user, 'userprofile'):
+        raise PermissionDenied("User profile does not exist.")
+    if user.userprofile.role != 'Admin':
+        raise PermissionDenied("You do not have admin privileges.")
+    return True
 
 def is_librarian(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+    if not hasattr(user, 'userprofile'):
+        raise PermissionDenied("User profile does not exist.")
+    if user.userprofile.role != 'Librarian':
+        raise PermissionDenied("You do not have librarian privileges.")
+    return True
 
 def is_member(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+    if not hasattr(user, 'userprofile'):
+        raise PermissionDenied("User profile does not exist.")
+    if user.userprofile.role != 'Member':
+        raise PermissionDenied("You do not have member privileges.")
+    return True
 
 @login_required
 @user_passes_test(is_admin)
