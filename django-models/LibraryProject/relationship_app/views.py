@@ -11,6 +11,7 @@ from django.contrib.auth import logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 
 def home_view(request):
     return HttpResponse('Welcome to library app.')
@@ -34,5 +35,36 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {'form': form})
+
+
+# Function to check if the user is an admin
+def is_admin(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+
+# Function to check if the user is a librarian
+def is_librarian(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+
+# Function to check if the user is a member
+def is_member(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+
+
+# Admin View
+@user_passes_test(is_admin)
+def admin_view(request):
+    return render(request, 'admin_dashboard.html')
+
+
+# Librarian View
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'librarian_dashboard.html')
+
+
+# Member View
+@user_passes_test(is_member)
+def member_view(request):
+    return render(request, 'member_dashboard.html')
 
 
