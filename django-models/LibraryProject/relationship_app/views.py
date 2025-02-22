@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseForbidden
 
 def home_view(request):
     return HttpResponse('Welcome to library app.')
@@ -39,31 +40,32 @@ def register(request):
 
 # Function to check if the user is an admin
 def is_admin(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
 # Function to check if the user is a librarian
 def is_librarian(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
 
 # Function to check if the user is a member
 def is_member(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
+# Custom Forbidden Response
+def forbidden_view(request):
+    return HttpResponseForbidden("You do not have permission to access this page.")
 
-# Admin View
-@user_passes_test(is_admin)
+# ✅ Admin View (Only Admins Can Access)
+@user_passes_test(is_admin, login_url='/forbidden/')  # Redirect if unauthorized
 def admin_view(request):
     return render(request, 'admin_dashboard.html')
 
-
-# Librarian View
-@user_passes_test(is_librarian)
+# ✅ Librarian View (Only Librarians Can Access)
+@user_passes_test(is_librarian, login_url='/forbidden/')
 def librarian_view(request):
     return render(request, 'librarian_dashboard.html')
 
-
-# Member View
-@user_passes_test(is_member)
+# ✅ Member View (Only Members Can Access)
+@user_passes_test(is_member, login_url='/forbidden/')
 def member_view(request):
     return render(request, 'member_dashboard.html')
 
