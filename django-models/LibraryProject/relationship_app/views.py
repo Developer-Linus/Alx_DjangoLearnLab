@@ -37,35 +37,33 @@ def register(request):
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {'form': form})
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import user_passes_test
 
-# Function to check if the user is an admin
+# Function to check if the user is an Admin
 def is_admin(user):
-    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
-# Function to check if the user is a librarian
+# Function to check if the user is a Librarian
 def is_librarian(user):
-    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
 
-# Function to check if the user is a member
+# Function to check if the user is a Member
 def is_member(user):
-    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
 
-# Custom Forbidden Response
-def forbidden_view(request):
-    return HttpResponseForbidden("You do not have permission to access this page.")
-
-# ✅ Admin View (Only Admins Can Access)
-@user_passes_test(is_admin, login_url='/forbidden/')  # Redirect if unauthorized
+# Admin View (Only Admins Can Access)
+@user_passes_test(is_admin)
 def admin_view(request):
     return render(request, 'admin_dashboard.html')
 
-# ✅ Librarian View (Only Librarians Can Access)
-@user_passes_test(is_librarian, login_url='/forbidden/')
+# Librarian View (Only Librarians Can Access)
+@user_passes_test(is_librarian)
 def librarian_view(request):
     return render(request, 'librarian_dashboard.html')
 
-# ✅ Member View (Only Members Can Access)
-@user_passes_test(is_member, login_url='/forbidden/')
+# Member View (Only Members Can Access)
+@user_passes_test(is_member)
 def member_view(request):
     return render(request, 'member_dashboard.html')
 

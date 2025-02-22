@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
-# from .views import list_books
+from .views import list_books
 from .views import LibraryDetailView
 from . import views
 from .views.admin_view import admin_dashboard
