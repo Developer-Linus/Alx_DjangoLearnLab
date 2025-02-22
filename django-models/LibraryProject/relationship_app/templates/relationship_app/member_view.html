@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #eef7ff; }
+        .container { margin: 50px auto; padding: 20px; max-width: 600px; background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; }
+        h1 { color: #dc3545; }
+        a { text-decoration: none; color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Member Dashboard</h1>
+        <p>Welcome, Member! You can browse and borrow books.</p>
+        <ul>
+            <li><a href="#">Browse Books</a></li>
+            <li><a href="#">View Borrowed Books</a></li>
+            <li><a href="#">Request Assistance</a></li>
+        </ul>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+    </div>
+</body>
+</html>
