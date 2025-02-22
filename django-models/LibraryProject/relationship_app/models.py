@@ -25,17 +25,22 @@ class Librarian(models.Model):
     def __str__(self):
         return self.name
 
-ROLE_CHOICES = {
-    'Admin', 'Admin',
-    'Librarian', 'Librarian',
-    'MEMBER','MEMBER',
-}
+# Define choices for user roles
+ROLE_CHOICES = [
+    ('Admin', 'Admin'),
+    ('Librarian', 'Librarian'),
+    ('Member', 'Member'),
+]
+
+# UserProfile model linked to Django's User model
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    roles = models.CharField(max_length=20, choices = ROLE_CHOICES, default='Member')
-    def __str__(self):
-        return f'{self.user.username} - {self.role}'
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Member')
 
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+
+# Signal to create UserProfile automatically when a User is created
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

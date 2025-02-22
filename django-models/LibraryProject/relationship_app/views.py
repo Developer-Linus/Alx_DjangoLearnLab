@@ -11,7 +11,7 @@ from django.contrib.auth import logout
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
 
@@ -58,17 +58,15 @@ def is_member(user):
     return check_role(user, 'Member')
 
 # Views with access control
-@login_required
 @user_passes_test(is_admin)
 def admin_view(request):
     return render(request, 'admin_view.html')
 
-@login_required
+
 @user_passes_test(is_librarian)
 def librarian_view(request):
     return render(request, 'librarian_view.html')
 
-@login_required
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'member_view.html')
