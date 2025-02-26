@@ -15,7 +15,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseForbidden
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import permission_required
-from .forms import BookForm 
+from .forms import BookForm
+from django.contrib.auth.decorators import login_required
 
 
 def home_view(request):
@@ -45,10 +46,18 @@ def register(request):
 
 # Role-checking functions
 def check_role(user, role):
-    if not user.UserProfile:
+       # Check if the user is authenticated
+    if not user.is_authenticated:
+        raise PermissionDenied("You must be logged in to access this page.")
+
+    # Check if the user has a UserProfile
+    if not hasattr(user, 'UserProfile'):
         raise PermissionDenied("User profile does not exist.")
+
+    # Check if the user has the required role
     if user.UserProfile.role != role:
         raise PermissionDenied(f"You do not have {role} privileges.")
+
     return True
 
 def is_admin(user):
@@ -61,15 +70,18 @@ def is_member(user):
     return check_role(user, 'Member')
 
 # Views with access control
+@login_required
 @user_passes_test(is_admin)
 def admin_view(request):
     return render(request, 'relationship_app/admin_view.html')
 
 
+@login_required
 @user_passes_test(is_librarian)
 def librarian_view(request):
     return render(request, 'relationship_app/librarian_view.html')
 
+@login_required
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
