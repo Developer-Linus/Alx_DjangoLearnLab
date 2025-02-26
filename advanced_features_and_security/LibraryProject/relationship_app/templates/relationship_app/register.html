@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>Register</h1>
+
+    <!-- Display error messages -->
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> Please correct the errors below.
+        </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+
+    <!-- Optional: Add a link to the login page -->
+    <a href="{% url 'login' %}">Already have an account? Log in</a>
+</body>
+</html>
