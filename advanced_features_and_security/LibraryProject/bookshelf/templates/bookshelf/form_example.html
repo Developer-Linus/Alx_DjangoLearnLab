@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.id %}Edit Book{% else %}Create Book{% endif %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .form-actions {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .form-actions button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-actions button:hover {
+            background-color: #0056b3;
+        }
+        .errorlist {
+            color: #dc3545;
+            margin-top: 5px;
+            margin-bottom: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>{% if form.instance.id %}Edit Book{% else %}Create Book{% endif %}</h1>
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Display form errors at the top -->
+            {% if form.non_field_errors %}
+                <div class="errorlist">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Title Field -->
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.title.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Author Field -->
+            <div class="form-group">
+                <label for="{{ form.author.id_for_label }}">Author</label>
+                {{ form.author }}
+                {% if form.author.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.author.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Publication Year Field -->
+            <div class="form-group">
+                <label for="{{ form.publication_year.id_for_label }}">Publication Year</label>
+                {{ form.publication_year }}
+                {% if form.publication_year.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.publication_year.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit">{% if form.instance.id %}Save Changes{% else %}Create Book{% endif %}</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

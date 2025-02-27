@@ -7,6 +7,19 @@ from .models import Book
 # from .forms import BookForm  # Assuming you have a BookForm for editing
 
 # Create your views here.
+
+def book_list(request):
+    # Get the search query from the request (if any)
+    search_query = request.GET.get('q', '')
+
+    # Use Django's ORM to filter books safely
+    if search_query:
+        books = Book.objects.filter(title__icontains=search_query) | Book.objects.filter(author__icontains=search_query)
+    else:
+        books = Book.objects.all()
+
+    # Pass the books and search query to the template
+    return render(request, 'bookshelf/book_list.html', {'books': books, 'search_query': search_query})
 def home(request):
     return HttpResponse('Welcome to the bookshelf app.')
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <style>
+        /* Add the same styles as before */
+    </style>
+</head>
+<body>
+    <h1>Book List</h1>
+    <!-- Search Form (GET method, no CSRF token needed) -->
+    <form method="get" action="{% url 'book_list' %}">
+        <input type="text" name="q" placeholder="Search by title or author" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if perms.bookshelf.can_create %}
+        <a href="{% url 'create_book' %}">Add New Book</a>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publication Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.publication_year }}</td>
+                <td class="actions">
+                    {% if perms.bookshelf.can_edit %}
+                        <a href="{% url 'edit_book' book.id %}">Edit</a>
+                    {% endif %}
+                    {% if perms.bookshelf.can_delete %}
+                        <!-- Delete Form (POST method, requires CSRF token) -->
+                        <form class="delete-form" action="{% url 'delete_book' book.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this book?');">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer;">Delete</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No books available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

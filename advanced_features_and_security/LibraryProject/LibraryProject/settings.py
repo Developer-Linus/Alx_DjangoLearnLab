@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-5y4ow%!!x)9^l7uei&ct=9mikcfmy8b*qnwh6%i0!ede(*c^m('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'csp.middleware.CSPMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -127,4 +128,25 @@ LOGIN_REDIRECT_URL = 'home'  # Redirect to this URL after successful login
 LOGOUT_REDIRECT_URL = 'login'  # Redirect to this URL after logout
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+CSP_DEFAULT_SRC = ("'self'",)  # Only allow resources from the same origin
+CSP_SCRIPT_SRC = ("'self'", "https://trustedscripts.example.com")  # Allow scripts from a trusted source
+CSP_STYLE_SRC = ("'self'", "https://trustedstyles.example.com", "'unsafe-inline'")  # Allow inline styles if necessary
+CSP_IMG_SRC = ("'self'", "https://images.example.com")  # Restrict image sources
+CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com")  # Allow fonts from Google Fonts
+CSP_CONNECT_SRC = ("'self'",)  # Restrict AJAX, WebSockets, and API requests
+CSP_OBJECT_SRC = ("'none'",)  # Block plugins (Flash, Java, etc.)
+CSP_MEDIA_SRC = ("'self'",)  # Allow media files
+CSP_FRAME_SRC = ("'self'", "https://trustedframes.example.com")  # Allow iframes from specific sources
+CSP_REPORT_ONLY = False  # Set to True to test without enforcing CSP
+
+
+
 
