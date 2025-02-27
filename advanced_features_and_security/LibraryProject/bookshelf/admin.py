@@ -13,25 +13,17 @@ class BookAdmin(admin.ModelAdmin):
 admin.site.register(Book, BookAdmin)
 
 
-
-
-from .models import UserProfile
-
-# Register your models here.
-
-admin.site.register(UserProfile)
-
 class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
 
-    list_display = ('username', 'email', 'date_of_birth', 'is_staff')
+    list_display = ('email', 'date_of_birth', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('username', 'email', 'date_of_birth')
-    ordering = ('username',)
+    ordering = ('email',)
 
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('password',)}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'date_of_birth', 'profile_photo')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
@@ -40,7 +32,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'date_of_birth', 'profile_photo'),
+            'fields': ('email', 'password1', 'password2', 'date_of_birth', 'profile_photo'),
         }),
     )
 admin.site.register(CustomUser, CustomUserAdmin)
