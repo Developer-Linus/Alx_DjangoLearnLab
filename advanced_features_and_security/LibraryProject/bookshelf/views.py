@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseForbidden
 from .models import Book
-# from .forms import BookForm  # Assuming you have a BookForm for editing
+from .forms import ExampleForm  # Assuming you have a BookForm for editing
 
 # Create your views here.
 
@@ -29,12 +29,12 @@ def edit_view(request, id):
     book = get_object_or_404(Book, id=id)
 
     if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
+        form = ExampleForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
             return redirect('book_detail', id=book.id)  # Redirect to the book detail page
     else:
-        form = BookForm(instance=book)
+        form = ExampleForm(instance=book)
 
     return render(request, 'bookshelf/edit_view.html', {'form': form, 'book': book})
 
@@ -51,11 +51,11 @@ def delete_view(request, id):
 @permission_required('bookshelf.can_create', raise_exception=True)
 def create_view(request):
     if request.method == 'POST':
-        form = BookForm(request.POST)
+        form = ExampleForm(request.POST)
         if form.is_valid():
             book = form.save()
             return redirect('book_detail', id=book.id)  # Redirect to the new book's detail page
     else:
-        form = BookForm()
+        form = ExampleForm()
 
     return render(request, 'bookshelf/create_view.html', {'form': form})

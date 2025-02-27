@@ -136,6 +136,9 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+
 CSP_DEFAULT_SRC = ("'self'",)  # Only allow resources from the same origin
 CSP_SCRIPT_SRC = ("'self'", "https://trustedscripts.example.com")  # Allow scripts from a trusted source
 CSP_STYLE_SRC = ("'self'", "https://trustedstyles.example.com", "'unsafe-inline'")  # Allow inline styles if necessary
