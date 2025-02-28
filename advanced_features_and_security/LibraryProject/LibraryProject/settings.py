@@ -150,6 +150,12 @@ CSP_MEDIA_SRC = ("'self'",)  # Allow media files
 CSP_FRAME_SRC = ("'self'", "https://trustedframes.example.com")  # Allow iframes from specific sources
 CSP_REPORT_ONLY = False  # Set to True to test without enforcing CSP
 
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000 #for one year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+
 
 
 
