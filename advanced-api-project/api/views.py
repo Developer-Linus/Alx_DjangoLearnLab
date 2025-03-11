@@ -15,6 +15,9 @@ class AuthorUpdateView(generics.UpdateAPIView):
 class AuthorListDeleteView(generics.DestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+class AuthorDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
 
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
@@ -29,3 +32,7 @@ class BookUpdateView(generics.UpdateAPIView):
 class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
