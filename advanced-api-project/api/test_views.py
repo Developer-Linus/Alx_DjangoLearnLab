@@ -42,4 +42,28 @@ class BookTests(APITestCase):
         self.assertEqual(len(response.data), 2)
         self.assertequal(response.data[0]['title'], 'Book One')
         self.assertequal(response.data[1]['title'], 'Book Two')
-    
+    # Write a test for BookCreateView to ensure it correctly creats a book
+    def create_book_test(self):
+        '''
+        Test that BookCreateView creates a new book with status code 201
+        '''
+        #Generate URL for BookCreateView
+        url = reverse('book-create')
+        #Data for the new book
+        data = {
+            'title': 'New Book',
+            'publication_year': '2022-01-01',
+            'author': self.author.id # Use the ID of the test author
+        }
+
+        # Make a POST request to the endpoint
+        response = self.client.post(url, data, format='json')
+
+        # Check that the status response code is 201(created)
+        self.assertEqual(response.status, status.HTTP_201_CREATED)
+
+        # Check that the book was created in the databse
+        self.asserEqual(Book.objects.count(), 3) #We started with 2 books
+        self.assertEqual(Book.objects.get(id=3).title, 'New Book')
+
+
