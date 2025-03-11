@@ -26,6 +26,7 @@ class BookTests(APITestCase):
         #Authenticate the client for tests requiring authentication
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
+        self.client.login(user=self.user)
 
     # Write test to test BookListView - lists all the books and supports filtering, searching, and ordering
     def book_list_test(self):
