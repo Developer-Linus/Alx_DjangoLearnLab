@@ -12,7 +12,7 @@ class AuthorCreateView(generics.CreateAPIView):
 class AuthorUpdateView(generics.UpdateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-class AuthorListDeleteView(generics.DestroyAPIView):
+class AuthorDeleteView(generics.DestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 class AuthorDetailView(generics.RetrieveUpdateDestroyAPIView):
