@@ -7,7 +7,7 @@
     <!-- Display Objects -->
     <li>{{ object.title }}</li>
     <!-- limit content to only 20 words to act as a snippet -->
-    <li>{{ object.content|truncatechars:50 }}</li><a href="{% url 'detail_post' object.id %}">Read more</a></li>
+    <li>{{ object.content|truncatechars:50 }}</li><a href="{% url 'post-detail' object.id %}">Read more</a></li>
 
     <hr/>
     <!-- If object_list is empty  -->
