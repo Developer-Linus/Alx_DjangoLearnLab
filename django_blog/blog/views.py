@@ -6,13 +6,13 @@ from .forms import CustomUserCreationForm
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
-        if form.is_valid:
+        if form.is_valid():
             user = form.save()
             #Redirects the user to login page
-            redirect('login')
+            return redirect('login')
     else:
         form = CustomUserCreationForm()
-    return(request, 'blog/register.html', {'form': form})
+    return render(request, 'blog/register.html', {'form': form})
 
 @login_required
 def profile(request):

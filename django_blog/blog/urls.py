@@ -10,4 +10,5 @@ urlpatterns = [
     # Custom views for registration and profile
     path('register/', views.register_view, name='register'),
     path('profile/', views.profile, name='profile'),
+    
 ]
