@@ -6,9 +6,15 @@ from . import views
 urlpatterns = [
     path('login/', LoginView.as_view(template_name='blog/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='blog/logout.html'), name='logout'),
-    
     # Custom views for registration and profile
     path('register/', views.register_view, name='register'),
     path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
     
+    #views for Post CRUD operations
+    path('posts/', views.PostList.as_view(), name='posts'),
+    path('posts/int:<pk>/', views.PostDetailView.as_view(), name='post-detail'),
+    path('posts/new/', views.PostCreate.as_view(), name='post-create'),
+    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post-update'),
+    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
 ]
