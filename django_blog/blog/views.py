@@ -98,18 +98,4 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author  # Only the author can delete
-    
-# @login_required
-# def create_post(request):
-#     if request.method == 'POST':
-#         form = PostForm(request.POST)
-#         if form.is_valid():
-#             post = post.save(commit=False) #Don't save yet
-#             post.author = request.user #Assigned the logged in user as the author
-#             post.save() #Now save the post
-#             return redirect('posts')
-#         else:
-#             form = PostForm()
-#         return render(request, 'blog/create_post.html', {'form': form})
-
             
