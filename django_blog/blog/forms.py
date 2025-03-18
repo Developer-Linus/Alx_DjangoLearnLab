@@ -26,13 +26,14 @@ class UpdateProfileForm(forms.ModelForm):
         fields = ['profile_picture', 'bio']
 # Create a post form
 class PostForm(forms.ModelForm):
-    class Meta: #Specify the Meta Class to be used
-        #Specify the model to be used
-        model = Post
-        # Specify the methods to be used
-        fields = [
-            'title', 
-            'content',
-        ]
+    class Meta:
+        model = Post  # Specify the model associated with the form
+        fields = ['title', 'content']  # Include only the title and content fields
+        
+        # Add widgets to enhance styling in templates
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Write your content here...'}),
+        }
     
 

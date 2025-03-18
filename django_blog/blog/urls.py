@@ -12,8 +12,8 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     
     #views for Post CRUD operations
-    path('post/', views.PostList.as_view(template_name='blog/list_view.html'), name='posts'),
-    path('post/int:<pk>/', views.PostDetailView.as_view(), name='post-detail'),
+    path('post/', views.PostList.as_view(), name='posts'),
+    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post-detail'),
     path('post/new/', views.PostCreate.as_view(), name='post-create'),
     path('post/<int:pk>/update/', views.PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),

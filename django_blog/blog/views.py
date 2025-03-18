@@ -59,6 +59,7 @@ class PostDetailView(DetailView):
     #specify the model to use
     model = Post
     template_name = 'blog/detail_post.html'  # Template file
+    context_object_name = 'post'
     
 #View to create a post
 class PostCreate(LoginRequiredMixin, CreateView):
@@ -66,28 +67,32 @@ class PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm  # Uses the form we created earlier
     template_name = 'blog/create_post.html'
-    success_url = reverse_lazy('posts')  # Redirect after success
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # Set logged-in user as author
         return super().form_valid(form)
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.object.pk})  # Redirect to the new post’s detail page
+    
 #View for editing posts
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     #specify the model to use
     model = Post
     form_class = PostForm
     template_name = 'blog/update_post.html'
-    success_url = reverse_lazy('posts')
 
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author  # Only the author can edit
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.object.pk})  # Redirect to the updated post
+    
     
 # View to delete a post
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     #specify the model you want to use
     model = Post
-    template_name = 'delete_post.html'
+    template_name = 'blog/delete_post.html'
     success_url = reverse_lazy('posts')
 
     def test_func(self):
