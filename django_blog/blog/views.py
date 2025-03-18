@@ -51,14 +51,14 @@ def edit_profile(request):
 class PostList(ListView):
     #specify the model for list view
     model = Post
-    template_name = 'blog/list_post.html'  # Template file
+    template_name = 'blog/post_list.html'  # Template file
     context_object_name = 'object_list'  # Context variable in template
 
 #View to show individual post
 class PostDetailView(DetailView):
     #specify the model to use
     model = Post
-    template_name = 'blog/detail_post.html'  # Template file
+    template_name = 'blog/post_detail.html'  # Template file
     context_object_name = 'post'
     
 #View to create a post
@@ -66,7 +66,7 @@ class PostCreate(LoginRequiredMixin, CreateView):
     #specify the model to use
     model = Post
     form_class = PostForm  # Uses the form we created earlier
-    template_name = 'blog/create_post.html'
+    template_name = 'blog/post_form.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user  # Set logged-in user as author
@@ -79,7 +79,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     #specify the model to use
     model = Post
     form_class = PostForm
-    template_name = 'blog/update_post.html'
+    template_name = 'blog/post_form.html'
 
     def test_func(self):
         post = self.get_object()
@@ -92,7 +92,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     #specify the model you want to use
     model = Post
-    template_name = 'blog/delete_post.html'
+    template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('posts')
 
     def test_func(self):
