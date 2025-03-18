@@ -12,9 +12,9 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     
     #views for Post CRUD operations
-    path('posts/', views.PostList.as_view(), name='posts'),
-    path('posts/int:<pk>/', views.PostDetailView.as_view(), name='post-detail'),
-    path('posts/new/', views.PostCreate.as_view(), name='post-create'),
-    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post-update'),
-    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
+    path('post/', views.PostList.as_view(), name='posts'),
+    path('post/int:<pk>/', views.PostDetailView.as_view(), name='post-detail'),
+    path('post/new/', views.PostCreate.as_view(), name='post-create'),
+    path('post/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
 ]
