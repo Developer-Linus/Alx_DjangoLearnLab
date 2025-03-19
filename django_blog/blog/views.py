@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
+from django.db.models import Q
+from taggit.models import Tag
 
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -96,6 +98,12 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('post-detail', kwargs={'pk': self.object.pk})  # Redirect to the updated post
     
+    def get_initial(self):
+        """Pre-fill the form with existing tags as a comma-separated string."""
+        initial = super().get_initial()
+        initial['tags'] = ", ".join(tag.name for tag in self.object.tags.all())
+        return initial
+    
     
 # View to delete a post
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -153,3 +161,33 @@ class CommentDeleteView(UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author  # Only the comment author can delete
+
+# View for search functionality in the database
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'posts'
+    
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)).distinct() #Distinct make sure that a post is unique and no duplicates
+        return Post.objects.none() #Return empty if no query
+    
+# View to display all posts associated with a specific tag
+class TagPostListView(ListView):
+    model = Post
+    template_name = "blog/posts_by_tag.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get("tag_name")
+        tag = get_object_or_404(Tag, name=tag_name)
+        return Post.objects.filter(tags=tag).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag_name"] = self.kwargs.get("tag_name")
+        return context
+
+    
