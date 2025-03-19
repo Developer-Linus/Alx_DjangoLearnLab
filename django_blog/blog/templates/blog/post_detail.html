@@ -4,7 +4,30 @@
 
 <h1>{{ object.title }}</h1>
 <p>{{ object.content }}</p>
+<p>Published on: {{ post.published_date }}</p>
+<p>Author: {{ post.author.username }}</p>
 
-{% include 'blog/comment_form.html'%}
+<!-- Display all comments -->
+<h3>Comments</h3>
+<ul>
+    {% for comment in comments %}
+        <li>
+            <strong>{{ comment.author.username }}</strong> - {{ comment.created_at }}
+            <p>{{ comment.content }}</p>
+            {% if comment.author == request.user %}
+                <a href="{% url 'edit-comment' pk=comment.pk %}">Edit</a>
+                <a href="{% url 'delete-comment' pk=comment.pk %}">Delete</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+<!-- Add a new comment -->
+<h3>Add a Comment</h3>
+<form method="post" action="{% url 'add-comment' pk=post.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}  <!-- Render the comment form -->
+    <button type="submit">Submit</button>
+</form>
 
 {% endblock %}

@@ -64,6 +64,9 @@ class PostDetailView(DetailView):
     # Include the context for comments in the post by overriding get_context_data method
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # Pass the CommentForm to the template
+        context['comment_form'] = CommentForm()
+        # Pass all comments for the post to the template
         context['comments'] = self.object.comments.all() #Add comments to the context.
         return context
     
@@ -109,14 +112,20 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
-    template_name = 'blog/comment_form.html'
+    template_name = 'blog/post_detail.html'
     
     def form_valid(self, form):
-        form.instance.post_id = self.kwargs['post_id'] #Adds post id
+        form.instance.post_id = self.kwargs['pk'] #Adds post id
         form.instance.author = self.request.user # Adds the author
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = get_object_or_404(Post, id=self.kwargs['pk'])  # Pass the post to the template
+        return context
+    
     def get_success_url(self):
-        return reverse_lazy('post-detail', kwargs={'post_id': self.kwargs['post_id']})
+        return reverse_lazy('post-detail', kwargs={'pk': self.kwargs['pk']})
 # Updating comment
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
@@ -125,17 +134,22 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
     
     def get_queryset(self):
         #Ensure only the comment author can edit the post
-        return Comment.objects.filter(self.author==self.request.user)
+        return Comment.objects.filter(author=self.request.user)
     def get_success_url(self):
-        return reverse_lazy('post-detail', kwargs={'post_id': self.object.post.id})
+        return reverse_lazy('post-detail', kwargs={'pk': self.object.post.id})
 
 # View for deleting comment
-class CommentDeleteView(PermissionRequiredMixin, DeleteView):
+class CommentDeleteView(UserPassesTestMixin, DeleteView):
     model = Comment
     template_name = 'blog/comment_confirm_delete.html'
-    
+
     def get_queryset(self):
-        #Ensure only the comment author can edit the post
-        return Comment.objects.filter(self.author==self.request.user)
+        # Ensure only the comment author can delete their own comment
+        return Comment.objects.filter(author=self.request.user)
+
     def get_success_url(self):
-        return reverse_lazy('post-detail', kwargs={'post_id': self.object.post.id})
+        return reverse_lazy('post-detail', kwargs={'pk': self.object.post.pk})
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author  # Only the comment author can delete
