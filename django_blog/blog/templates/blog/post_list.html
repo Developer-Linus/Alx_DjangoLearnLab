@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<ul>
+    <!-- Iterate over object_list -->
+    {% for object in object_list %}
+    <!-- Display Objects -->
+    <li>{{ object.title }}</li>
+    <!-- limit content to only 20 words to act as a snippet -->
+    <li>{{ object.content|truncatechars:50 }}</li><a href="{% url 'post-detail' object.id %}">Read more</a></li>
+    <li>
+        <!-- Display tags -->
+        <p><strong>Tags:</strong> 
+            {% for tag in post.tags.all %}
+                <a href="{% url 'search-results' %}?q={{ tag.name }}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                No tags.
+            {% endfor %}
+        </p>
+    </li>
+
+    <hr/>
+    <!-- If object_list is empty  -->
+    {% empty %}
+    <li>No objects yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

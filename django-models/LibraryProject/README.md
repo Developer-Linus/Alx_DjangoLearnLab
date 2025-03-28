@@ -1,0 +1,3 @@
+- `settings.py` file contains settings and configurations of the _LibraryProject_ project.
+- `urls.py` file is the URL routing for the project. It acts as table of contents.
+- `manage.py` file is the command-line utility that enables me to interact with the project.

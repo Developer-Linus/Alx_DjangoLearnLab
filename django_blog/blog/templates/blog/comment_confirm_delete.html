@@ -1,0 +1,18 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Confirm Deletion</h2>
+    <p>Are you sure you want to delete this comment?</p>
+    <blockquote>
+        <p>{{ object.content }}</p> <!-- Assuming 'content' is the field for the comment text -->
+        <footer>By {{ object.author }} on {{ object.created_at }}</footer>
+    </blockquote>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'post-detail' pk=object.post.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

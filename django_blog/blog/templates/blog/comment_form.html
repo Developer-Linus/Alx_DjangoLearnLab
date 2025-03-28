@@ -1,0 +1,22 @@
+<!-- comment_form.html -->
+<h2>
+    {% if form.instance.pk %}  <!-- Check if the comment already exists (editing) -->
+        Edit Comment
+    {% else %}
+        Add a Comment
+    {% endif %}
+</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Render the form fields -->
+    <button type="submit">
+        {% if form.instance.pk %}  <!-- Change button text based on context -->
+            Update
+        {% else %}
+            Submit
+        {% endif %}
+    </button>
+</form>
+
+<a href="{% url 'post-detail' pk=form.instance.post.id %}">Cancel</a>

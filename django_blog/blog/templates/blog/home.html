@@ -1,0 +1,25 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Home | FriendChat{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100 text-center">
+    <h1 class="display-4 fw-bold text-primary">Welcome to FriendChat</h1>
+    <p class="lead text-muted">Stay connected with your friends anytime, anywhere!</p>
+
+    {% if user.is_authenticated %}
+        <div class="card p-4 shadow-sm mt-3" style="max-width: 400px;">
+            <h3 class="text-success">Hi, {{ user.username }}! 👋</h3>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100 mt-3">Log Out</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="card p-4 shadow-sm mt-3" style="max-width: 400px;">
+            <p class="text-warning">You are not logged in.</p>
+            <a href="{% url 'login' %}" class="btn btn-primary w-100">Log In</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

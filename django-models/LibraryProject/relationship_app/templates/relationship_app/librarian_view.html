@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Librarian Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        .container { margin: 50px auto; padding: 20px; max-width: 600px; background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; }
+        h1 { color: #28a745; }
+        a { text-decoration: none; color: #28a745; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Librarian Dashboard</h1>
+        <p>Welcome, Librarian! You can manage books and assist members.</p>
+        <ul>
+            <li><a href="#">Manage Books</a></li>
+            <li><a href="#">Issue & Return Books</a></li>
+            <li><a href="#">Member Requests</a></li>
+        </ul>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+    </div>
+</body>
+</html>
